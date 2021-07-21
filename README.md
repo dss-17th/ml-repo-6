@@ -55,10 +55,86 @@ Efficient Network의 Max Accuracy weights와 Min Loss weights의 예측결과
 <br/>
 
 ## 3. 과정
+Efficient Network에 대한 모델링 과정(다른 네트워크들도 대부분 동일한 과정으로 진행)
 
+> ###  1. import module
+```
+from drive.MyDrive.datas.module.preprocess import *
+from drive.MyDrive.datas.module.setting_tf import *
+from drive.MyDrive.datas.module.visualization import *
+```
+- preprocess : Load Dataset 및 modeling을 위한 Input Dataset으로 가공
+- setting_tf : Load Network 및 콜백함수 세팅
+- visualization : 모델링 학습 history, predict 시각화
 
+<br/>
 
+> ### 2. Load Dataset 및 모델링을 위한 Input Dataset 생성
+```
+# raw dataset 가져오기
+dataset = get_dataset() 
 
+# dataset을 train, validation으로 split, 모든 이미지 동일하게 resize한 후 랜덤셔플
+datas = split_train_valid_df(dataset=dataset, img_size=224, shuffle=True)
+
+# image와 label 데이터셋으로 세분화
+X_train, y_train, X_valid, y_valid = split_X_y_dataset(datas=datas)
+```
+
+<br/>
+
+> ### 3. MinMaxscaling and Load CNN Network
+```
+X_train = X_train / 255.0
+X_valid = X_valid / 255.0
+```
+```
+name = "efficientnet"
+base_model = load_base_model(name, input_shape=(224, 224, 3), trainable=False)
+
+model = make_network(base_model, name)
+model.compile(optimizer=tf.keras.optimizers.Adam(1e-4), loss='binary_crossentropy', metrics=['accuracy'])
+```
+- efficient Network를 불러온 후 setting_tf의 make_network함수를 통한 모델 구성
+
+<br/>
+
+> ### 4. Callback Function Setting
+```
+monitor_ls = ["val_accuracy", "val_loss"]
+callbacks = setting_callback("efficientnet", monitors=monitor_ls)
+```
+- monitor할 대상을 list형식에 넣어준 후 setting_tf의 setting_callback 함수를 통해 weight 저장을 위한 콜백함수 세팅
+
+<br/>
+
+> ### 5. 모델 학습
+```
+history = model.fit(X_train, y_train, epochs=150, batch_size=32,
+                    validation_data=(X_valid, y_valid), verbose=1,
+                    callbacks=callbacks)
+```
+- 콜백함수를 통해 val_accuracy가 Max일 때, val_loss가 Min일 떄 두 경우의 weights를 저장
+
+<br/>
+
+> ### 6. history 밒 predict Visualization
+```
+make_scores_graph(history=history)
+```
+<img width="720" alt="fit_history" src="https://user-images.githubusercontent.com/80459520/126494909-d1ccad68-48ce-4e24-a53c-5ef44c151a09.png">
+
+- model fitting history의 시각화
+
+```
+weight = "/content/drive/MyDrive/datas/model_result/efficientnet_loss.h5"
+show_predict(model, weight, X_valid, y_valid)
+```
+<img width="704" alt="predict" src="https://user-images.githubusercontent.com/80459520/126495209-39a3c781-49d4-44b8-b606-7389da81161f.png">
+
+- Validation Dataset에서 16개의 비복원추출 랜덤샘플링을 통한 Predict Visualization
+
+<br/>
 
 ### Modeling 현황
 
