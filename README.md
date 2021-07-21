@@ -20,8 +20,10 @@ Kaggle의 photo vs painting Dataset을 통해 사진과 그림 뷴류해낼 수 
 - BGR, HSV, Hist벡터화 등의 다양한 이미지 전처리를 통한 Input Dataset 생성
 - matplotlib, seaborn을 통한 EDA 및 결과 데이터 Visualization
 
-### 1-4. 데이터셋 및 설명
-Kaggle Dataset
+### 1-4. 설명 및 데이터셋
+**본 프로젝트의 모델링 과정은 GPU 사용을 위해 Colab에서 진행하였습니다.**
+
+데이터 : Kaggle Dataset
 - Train Dataset : 7041 datas (photo: 3528, painting: 3513)
 - Validation Dataset : 3010 datas (photo: 1505, painting: 1505)
 
@@ -50,8 +52,10 @@ Efficient Network의 Max Accuracy weights와 Min Loss weights의 예측결과
 > 최종모델 : Efficient Network의 Max Accracy, Min Loss Model
 
 <br/>
+
 ---
 ---
+
 <br/>
 
 ## 3. 과정
@@ -118,7 +122,7 @@ history = model.fit(X_train, y_train, epochs=150, batch_size=32,
 
 <br/>
 
-> ### 6. history 밒 predict Visualization
+> ### 6. history 및 predict Visualization
 ```
 make_scores_graph(history=history)
 ```
