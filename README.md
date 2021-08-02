@@ -1,7 +1,6 @@
 # Painting vs Photo Binary Classification 프로젝트
 
 ## 1. 개요
-<br/>
 
 ### 1-1. 프로젝트 목적
 Kaggle의 photo vs painting Dataset을 통해 사진과 그림 뷴류해낼 수 있는 이진분류모델을 만드는 것이 주 목적이며, 다양한 CNN Network의 모델링을 통해 가장 졿은 성능을 가진 모델을 도출하는 것입니다.
@@ -30,7 +29,6 @@ Kaggle의 photo vs painting Dataset을 통해 사진과 그림 뷴류해낼 수 
 <br/>
 <img width="550" alt="raw_images" src="https://user-images.githubusercontent.com/80459520/126477266-486ad4c4-b3a7-45d8-8b0a-e982c32499fa.png">
 <br/>
-<br/>
 
 ### 1-5. 팀구성
 - 송강 ([GitHub](https://github.com/rivels))
@@ -42,6 +40,14 @@ Kaggle의 photo vs painting Dataset을 통해 사진과 그림 뷴류해낼 수 
 ---
 
 ## 2. 결론
+
+#### 초기 모델링 및 스토리라인
+<img width="1006" alt="스크린샷 2021-08-02 오후 7 27 45" src="https://user-images.githubusercontent.com/80459520/127847489-1b42a270-5b4c-42f0-9259-a8c4f50fa99f.png">
+
+LeNet부터 ResNet Network와 ResNet에서는 각각의 하이퍼 파라미터 튜닝을 통해 총 8번의 모델링을 한 결과 Train Accuracy와 Loss는 각각 1과 0으로 수렴한다.
+
+그러나 Valiation Accuracy는 Train Accuracy와의 격차가 심할 뿐더러 크게 튀는 경우도 존재하고, Loss같은 경우는 Epoch가 진행될수록 점점 증가하기에 신뢰성 있는 예측모델이라고 판단할 수 없기에 Callback 함수를 통한 최적의 가중치를 도출하는 방법으로 모델링 진행.
+
 <br/>
 
 #### <Validation Score를 통한 최종 Network 및 Model 선정>
@@ -49,7 +55,8 @@ Kaggle의 photo vs painting Dataset을 통해 사진과 그림 뷴류해낼 수 
 
 Efficient Network의 Max Accuracy weights와 Min Loss weights의 예측결과
 정확도는 90.5%, 예측 실패한 횟수는 286 으로 가장 좋은 성능을 보였음
-> 최종모델 : Efficient Network의 Max Accracy, Min Loss Model
+
+**최종모델 : Efficient Network의 Max Accracy, Min Loss Model**
 
 <br/>
 
@@ -67,9 +74,8 @@ from drive.MyDrive.datas.module.preprocess import *
 from drive.MyDrive.datas.module.setting_tf import *
 from drive.MyDrive.datas.module.visualization import *
 ```
-- preprocess : Load Dataset 및 modeling을 위한 Input Dataset으로 가공
-- setting_tf : Load Network 및 콜백함수 세팅
-- visualization : 모델링 학습 history, predict 시각화
+- 모델링 및 시각화를 위해 필요한 모듈 import 
+   >(모듈 설명 : 맨아래 Code Explanation 부분에 존재)
 
 <br/>
 
@@ -138,21 +144,35 @@ show_predict(model, weight, X_valid, y_valid)
 
 - Validation Dataset에서 16개의 비복원추출 랜덤샘플링을 통한 Predict Visualization
 
+---
 <br/>
 
-### Modeling 현황
+# 💡 제언 및 한계점
+```
+- Train, Validation Dataset의 두 Class의 비율이 5:5이고 사진을 그린 그림, 그림을 찍은 사진들이 있음에도 불구하고 최종 선정 모델의 Accuracy가 90.5% 라면 준수를 예측결과라고 생각합니다.
 
-<img width="1004" alt="스크린샷 2021-07-11 오후 11 46 08" src="https://user-images.githubusercontent.com/80459520/125199669-3499b500-e2a2-11eb-8490-59b47ff228e8.png">
+- 데이터의 양이 많았다면 좀 더 성능 좋은 모델이 도출될 것으로 생각됩니다.
 
+- Train Dataset과 Validation Dataset 간에 픽셀값 간의 특징 외에 다른 특징(같은 작가의 이미지로 판단, 특정 문구로 인한 판단 등) 들이 존재하는지 파악하는 것도 결과의 신뢰성을 높이는 방법 중 하나라고 생각합니다. 
+```
 
-### Accuracy 및 Loss Visualization
+<br/>
 
-<img width="988" alt="스크린샷 2021-07-11 오후 11 46 39" src="https://user-images.githubusercontent.com/80459520/125199716-82162200-e2a2-11eb-8212-74b90f260690.png">
+# Code Explanation
+- Module
+  - > [preprocess.py](https://github.com/dss-17th/ml-repo-6/blob/main/module/preprocess.py) : Load Dataset 및 modeling을 위한 Input Dataset으로 가공
+  - > [setting_tf.py](https://github.com/dss-17th/ml-repo-6/blob/main/module/setting_tf.py) : Load Network 및 콜백함수 세팅
+  - > [visualization.py](https://github.com/dss-17th/ml-repo-6/blob/main/module/visualization.py) : 모델링 학습 history, predict 결과 시각화
 
-<img width="970" alt="스크린샷 2021-07-11 오후 11 46 53" src="https://user-images.githubusercontent.com/80459520/125199724-922e0180-e2a2-11eb-84b9-b25326c24de8.png">
+- EDA
+  - > [image_EDA.ipynb](https://github.com/dss-17th/ml-repo-6/blob/main/image_EDA.ipynb) : 데이터셋 구성 및 이미지에 대한 EDA Notebook
 
-<img width="498" alt="스크린샷 2021-07-11 오후 11 47 04" src="https://user-images.githubusercontent.com/80459520/125199730-99550f80-e2a2-11eb-8200-a70e59865ae8.png">
-
-<img width="541" alt="스크린샷 2021-07-11 오후 11 47 13" src="https://user-images.githubusercontent.com/80459520/125199731-9fe38700-e2a2-11eb-84f8-af2b25dadda0.png">
-
-<img width="716" alt="스크린샷 2021-07-11 오후 11 47 21" src="https://user-images.githubusercontent.com/80459520/125199752-abcf4900-e2a2-11eb-9883-8fa6bfe88e6a.png">
+- Modeling
+  - > [MobileNet.ipynb](https://github.com/dss-17th/ml-repo-6/blob/main/MobileNet.ipynb) : MobileNet에 대한 Modeling Notebook
+  - > [ResNet.ipynb](https://github.com/dss-17th/ml-repo-6/blob/main/ResNet.ipynb) : ResNet에 대한 Modeling Notebook
+  - > [Inception_ResNet.ipynb](https://github.com/dss-17th/ml-repo-6/blob/main/Inception_ResNet.ipynb) : Inception_ResNet에 대한 Modeling Notebook
+  - > [InceptionV3.ipynb](https://github.com/dss-17th/ml-repo-6/blob/main/InceptionV3.ipynb) : Incaption_V3에 대한 Modeling Notebook
+  - > [EfficientNet.ipynb](https://github.com/dss-17th/ml-repo-6/blob/main/EfficientNet.ipynb) : EfficientNet에 대한 Modeling Notebook
+  - > [others_modeling.ipynb](https://github.com/dss-17th/ml-repo-6/blob/main/others_modeling.ipynb) : 초기 모델 및 Hist vector화 후 DenseNet 모델링
+- 최종 모델 선정
+  - > [select_best_model.ipynb](https://github.com/dss-17th/ml-repo-6/blob/main/select_best_model.ipynb) : 5개의 Network 중 가장 Validation Score가 높은 모델을 선정하는 Notebook
