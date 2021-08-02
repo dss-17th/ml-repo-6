@@ -32,8 +32,10 @@ Kaggle의 photo vs painting Dataset을 통해 사진과 그림 뷴류해낼 수 
 
 ### 1-5. 팀구성
 - 송강 ([GitHub](https://github.com/rivels))
+  - Modeling
   - README 작성
 - 이승주 ([GitHub](https://github.com/aeea-0605))
+  - EDA 및 Modeling
   - README 작성
 
 ---
