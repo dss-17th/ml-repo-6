@@ -151,7 +151,7 @@ show_predict(model, weight, X_valid, y_valid)
 
 # 💡 제언 및 한계점
 ```
-- Train, Validation Dataset의 두 Class의 비율이 5:5이고 사진을 그린 그림, 그림을 찍은 사진들이 있음에도 불구하고 최종 선정 모델의 Accuracy가 90.5% 라면 준수를 예측결과라고 생각합니다.
+- Train, Validation Dataset의 두 Class의 비율이 5:5이고 사진을 그린 그림, 그림을 찍은 사진들이 있음에도 불구하고 최종 선정 모델의 Accuracy가 90.5% 라면 준수한 예측결과라고 생각합니다.
 
 - 데이터의 양이 많았다면 좀 더 성능 좋은 모델이 도출될 것으로 생각됩니다.
 
